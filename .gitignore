@@ -2,3 +2,4 @@
 .idea
 .gradle
 crawler-engine/build
+crawler-engine/.gradle
