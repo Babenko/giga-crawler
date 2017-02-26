@@ -1,0 +1,13 @@
+
+repositories {
+    jcenter()
+}
+
+dependencies{
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Library'
+    }
+}
