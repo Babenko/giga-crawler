@@ -5,3 +5,9 @@ repositories {
 
 dependencies{
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'Library'
+    }
+}
