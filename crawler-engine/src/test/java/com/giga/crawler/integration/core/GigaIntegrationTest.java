@@ -1,10 +1,9 @@
 package com.giga.crawler.integration.core;
 
+import com.giga.crawler.core.Giga;
 import com.giga.crawler.model.element.Element;
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.Test;
-import org.junit.matchers.JUnitMatchers;
 import util.ResourceLoader;
 
 import java.util.List;

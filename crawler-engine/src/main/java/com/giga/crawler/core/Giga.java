@@ -1,13 +1,10 @@
-package com.giga.crawler.integration.core;
+package com.giga.crawler.core;
 
-import com.giga.crawler.integration.core.parse.Parser;
-import com.giga.crawler.integration.core.parse.RegexpParser;
-import com.giga.crawler.integration.core.parse.TopToBottomParser;
+import com.giga.crawler.core.parse.Parser;
+import com.giga.crawler.core.parse.TopToBottomParser;
 import com.giga.crawler.model.element.Element;
 
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Sem Babenko

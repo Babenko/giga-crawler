@@ -1,10 +1,9 @@
-package com.giga.crawler.integration.core.parse;
+package com.giga.crawler.core.parse;
 
 import com.giga.crawler.model.element.Element;
 import com.giga.crawler.model.element.ElementFactory;
 import com.giga.crawler.model.element.ElementName;
 import com.giga.crawler.model.element.Html;
-import com.sun.javadoc.Doc;
 
 import java.util.LinkedList;
 import java.util.regex.Matcher;

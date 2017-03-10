@@ -1,4 +1,4 @@
-package com.giga.crawler.integration.core.parse;
+package com.giga.crawler.core.parse;
 
 import com.giga.crawler.model.element.Element;
 

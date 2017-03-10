@@ -1,4 +1,8 @@
 
+plugins {
+    id "me.champeau.gradle.jmh" version "0.3.1"
+}
+
 repositories {
     jcenter()
 }
@@ -11,4 +15,11 @@ jar {
     manifest {
         attributes 'Main-Class': 'Library'
     }
+}
+
+jmh {
+    duplicateClassesStrategy = 'warn'
+    fork = 1
+    iterations = 10
+    warmupIterations = 10
 }
