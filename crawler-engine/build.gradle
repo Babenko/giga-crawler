@@ -4,6 +4,7 @@ repositories {
 }
 
 dependencies{
+    compile project(':crawler-model')
 }
 
 jar {

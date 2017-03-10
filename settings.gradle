@@ -10,5 +10,6 @@
  */
 
 include 'crawler-engine'
+include 'crawler-model'
 
 rootProject.name = 'giga-crawler'
