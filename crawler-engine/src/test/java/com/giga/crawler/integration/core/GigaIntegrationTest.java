@@ -41,6 +41,9 @@ public class GigaIntegrationTest extends IntegrationTest {
     public void testSimplePageWithSiblings() throws Exception {
         
         Element root = Giga.of(ResourceLoader.loadFile(SIMPLE_SIBLING_HTML)).getRoot();
+        assertNull(root.getNext());
+        assertNull(root.getPrevious());
+
         Element div = root.getChildren()
                 .stream()
                 .filter(element -> element.getName().equals(ElementName.BODY))
@@ -55,9 +58,11 @@ public class GigaIntegrationTest extends IntegrationTest {
         
         Element h1 = div.getPrevious();
         assertThat(h1.getNext().getName(), equalTo(ElementName.DIV));
+        assertNull(h1.getPrevious());
 
         Element span = div.getNext();
         assertThat(span.getPrevious().getName(), equalTo(ElementName.DIV));
+        assertNull(span.getNext());
     }
 
 }
