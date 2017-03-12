@@ -18,6 +18,10 @@ public abstract class CommonElement implements Element {
 
     protected Element parent;
 
+    protected Element previous;
+
+    protected Element next;
+
     @Override
     public List<Element> getChildren() {
         return children;
@@ -51,5 +55,25 @@ public abstract class CommonElement implements Element {
     @Override
     public boolean hasChildren() {
         return !children.isEmpty();
+    }
+
+    @Override
+    public Element getNext() {
+        return next;
+    }
+
+    @Override
+    public Element getPrevious() {
+        return previous;
+    }
+
+    @Override
+    public void append(Element element) {
+        next = element;
+    }
+
+    @Override
+    public void prepend(Element element) {
+        previous = element;
     }
 }
