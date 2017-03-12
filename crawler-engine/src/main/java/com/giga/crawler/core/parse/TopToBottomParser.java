@@ -59,14 +59,14 @@ public class TopToBottomParser implements Parser{
     }
 
     private void handleSiblings(Element first, Element second) {
-        if(first.getParent().equals(second.getParent())) {
+        if(first.getParent() != null && first.getParent().equals(second.getParent())) {
             first.append(second);
             second.prepend(first);
         }
     }
 
     private Element getElementByStringName(String elem) {
-        return elementFactory.getElemenetByName(validate(elem.toLowerCase()));
+        return elementFactory.getElementByName(validate(elem.toLowerCase()));
     }
 
     private ElementName validate(String name) {

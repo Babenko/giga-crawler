@@ -11,7 +11,9 @@ public enum ElementName {
     DIV("div"),
     HTML("html"),
     HEAD("head"),
-    BODY("body");
+    BODY("body"),
+    H1("h1"),
+    SPAN("span");
 
     private String name;
 
