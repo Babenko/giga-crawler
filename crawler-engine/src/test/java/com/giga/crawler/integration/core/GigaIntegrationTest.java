@@ -65,4 +65,9 @@ public class GigaIntegrationTest extends IntegrationTest {
         assertNull(span.getNext());
     }
 
+    @Test
+    public void testSimpleElementPayload() throws Exception {
+        
+    }
+
 }
