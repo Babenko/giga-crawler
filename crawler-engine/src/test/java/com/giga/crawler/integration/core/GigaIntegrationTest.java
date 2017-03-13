@@ -67,7 +67,7 @@ public class GigaIntegrationTest extends IntegrationTest {
 
     @Test
     public void testSimpleElementPayload() throws Exception {
-        
+
     }
 
 }

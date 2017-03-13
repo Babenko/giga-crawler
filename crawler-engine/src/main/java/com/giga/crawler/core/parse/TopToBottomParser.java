@@ -19,7 +19,7 @@ public class TopToBottomParser implements Parser{
     private ElementFactory elementFactory = new ElementFactory();
 
     public TopToBottomParser(String document) {
-        this.DOCUMENT = document;
+        DOCUMENT = document;
     }
 
     @Override
