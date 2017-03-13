@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Sem Babenko
  */
-public interface Element extends Childable, Parentable {
+public interface Element extends Childable, Parentable, Siblingable {
 
     ElementName getName();
 

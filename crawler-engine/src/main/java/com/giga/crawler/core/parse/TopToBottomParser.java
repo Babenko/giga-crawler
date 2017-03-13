@@ -16,7 +16,7 @@ public class TopToBottomParser implements Parser{
 
     private final String DOCUMENT;
     private LinkedList<ElementName> elementNames = new LinkedList<>();
-
+    private ElementFactory elementFactory = new ElementFactory();
 
     public TopToBottomParser(String document) {
         this.DOCUMENT = document;
@@ -28,8 +28,8 @@ public class TopToBottomParser implements Parser{
     }
 
     private Element processing() {
-        Element root = new Html();
-        Element currentElement = root;
+        Element currentElement, lastParsedElement, root = new Html();
+        currentElement = lastParsedElement = root;
         for(int charIndex = 0; charIndex < DOCUMENT.length(); charIndex++) {
             char currentChar = DOCUMENT.charAt(charIndex);
             if(currentChar == Parser.OPEN_BRACKET) {
@@ -46,9 +46,11 @@ public class TopToBottomParser implements Parser{
                     elementNames.add(newElem.getName());
                     currentElement.addChild(newElem);
                     newElem.setParent(currentElement);
+                    handleSiblings(lastParsedElement, newElem);
                     currentElement = newElem;
                 } else if(!elementNames.isEmpty()) {
                     elementNames.removeLast();
+                    lastParsedElement = currentElement;
                     currentElement = currentElement.getParent();
                 }
             }
@@ -56,9 +58,15 @@ public class TopToBottomParser implements Parser{
         return root;
     }
 
+    private void handleSiblings(Element first, Element second) {
+        if(first.getParent() != null && first.getParent().equals(second.getParent())) {
+            first.append(second);
+            second.prepend(first);
+        }
+    }
+
     private Element getElementByStringName(String elem) {
-        ElementFactory elementFactory = new ElementFactory();
-        return elementFactory.getElemenetByName(validate(elem.toLowerCase()));
+        return elementFactory.getElementByName(validate(elem.toLowerCase()));
     }
 
     private ElementName validate(String name) {

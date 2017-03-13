@@ -22,6 +22,6 @@ public class Html extends CommonElement {
 
     @Override
     public Element getParent() {
-        throw null;
+        return null;
     }
 }
