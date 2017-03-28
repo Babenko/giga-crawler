@@ -44,9 +44,6 @@ public class TopToBottomParser implements Parser{
                 readTag();
                 if(!sb.toString().contains("/")) {
                     sb.append(DOCUMENT[charIndex]);
-                    System.out.println("--------------");
-                    System.out.println(sb.toString());
-                    System.out.println("--------------");
                     Element newElem = getElementByStringName(sb.toString());
                     if(newElem.getName().equals(ElementName.UNKNOWN)) {
                         continue;
@@ -82,7 +79,7 @@ public class TopToBottomParser implements Parser{
     }
 
     private ElementName validate(String name) {
-        Pattern pattern = Pattern.compile("\\w*");//Pattern.compile("<(\\\"[^\\\"]*\\\"|'[^']*'|[^'\\\">])*>");
+        Pattern pattern = Pattern.compile("\\w*");
         Matcher matcher = pattern.matcher(name);
         if(matcher.find(1)) {
             return ElementName.valueOf(matcher.group().trim().toUpperCase());
@@ -96,5 +93,3 @@ public class TopToBottomParser implements Parser{
         } while (DOCUMENT[++charIndex] != Parser.CLOSE_BRACKET);
     }
 }
-
-//(?<=>)[\n\s]*\w.*
