@@ -26,6 +26,7 @@ public class TopToBottomParser implements Parser{
 
     @Override
     public Element getRoot() {
+        charIndex = 0;
         return processing();
     }
 
