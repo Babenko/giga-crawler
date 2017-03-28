@@ -9,6 +9,9 @@ repositories {
 
 dependencies{
     compile project(':crawler-model')
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
+
 }
 
 jar {

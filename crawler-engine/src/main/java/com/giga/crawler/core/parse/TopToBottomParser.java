@@ -4,8 +4,11 @@ import com.giga.crawler.model.element.Element;
 import com.giga.crawler.model.element.ElementFactory;
 import com.giga.crawler.model.element.ElementName;
 import com.giga.crawler.model.element.Html;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,12 +35,13 @@ public class TopToBottomParser implements Parser{
 
     private Element processing() {
         Element currentElement, lastParsedElement, root = new Html();
+        String payload = StringUtils.EMPTY;
         currentElement = lastParsedElement = root;
         for(; charIndex < DOCUMENT.length; charIndex++) {
             char currentChar = DOCUMENT[charIndex];
             if(currentChar == Parser.OPEN_BRACKET) {
                 sb.setLength(0);
-                readOpenTag();
+                readTag();
                 if(!sb.toString().contains("/")) {
                     sb.append(DOCUMENT[charIndex]);
                     System.out.println("--------------");
@@ -55,8 +59,12 @@ public class TopToBottomParser implements Parser{
                 } else if(!elementNames.isEmpty()) {
                     elementNames.removeLast();
                     lastParsedElement = currentElement;
+                    currentElement.setPayload(payload);
+                    payload = StringUtils.EMPTY;
                     currentElement = currentElement.getParent();
                 }
+            } else {
+                payload += currentChar;
             }
         }
         return root;
@@ -82,7 +90,7 @@ public class TopToBottomParser implements Parser{
         return ElementName.UNKNOWN;
     }
 
-    private void readOpenTag() {
+    private void readTag() {
         do {
             sb.append(DOCUMENT[charIndex]);
         } while (DOCUMENT[++charIndex] != Parser.CLOSE_BRACKET);

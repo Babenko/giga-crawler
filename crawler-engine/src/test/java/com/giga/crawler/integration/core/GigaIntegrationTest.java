@@ -7,6 +7,7 @@ import org.junit.Test;
 import util.ResourceLoader;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -67,7 +68,19 @@ public class GigaIntegrationTest extends IntegrationTest {
 
     @Test
     public void testSimpleElementPayload() throws Exception {
+        Element root = Giga.of(ResourceLoader.loadFile(SIMPLE_HTML)).getRoot();
 
+        Element div = root.getChildren()
+                .stream()
+                .filter(element -> element.getName().equals(ElementName.BODY))
+                .flatMap(element -> element.getChildren().stream())
+                .filter(element -> element.getName().equals(ElementName.DIV))
+                .findFirst()
+                .orElse(null);
+
+        assertThat(div, notNullValue());
+
+        assertThat(div.getPayload().trim(), equalTo("simple html"));
     }
 
 }
