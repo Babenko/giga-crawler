@@ -41,6 +41,8 @@ public class TopToBottomParser implements Parser{
             char currentChar = DOCUMENT[charIndex];
             if(currentChar == Parser.OPEN_BRACKET) {
                 sb.setLength(0);
+                currentElement.setPayload(payload);
+                payload = StringUtils.EMPTY;
                 readTag();
                 if(!sb.toString().contains("/")) {
                     sb.append(DOCUMENT[charIndex]);
@@ -56,7 +58,6 @@ public class TopToBottomParser implements Parser{
                 } else if(!elementNames.isEmpty()) {
                     elementNames.removeLast();
                     lastParsedElement = currentElement;
-                    currentElement.setPayload(payload);
                     payload = StringUtils.EMPTY;
                     currentElement = currentElement.getParent();
                 }
