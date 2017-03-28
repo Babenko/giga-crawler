@@ -14,12 +14,14 @@ import java.util.regex.Pattern;
  */
 public class TopToBottomParser implements Parser{
 
-    private final String DOCUMENT;
+    private final char[] DOCUMENT;
     private LinkedList<ElementName> elementNames = new LinkedList<>();
     private ElementFactory elementFactory = new ElementFactory();
+    private StringBuilder sb = new StringBuilder();
+    private int charIndex = 0;
 
     public TopToBottomParser(String document) {
-        DOCUMENT = document;
+        DOCUMENT = document.toCharArray();
     }
 
     @Override
@@ -30,16 +32,16 @@ public class TopToBottomParser implements Parser{
     private Element processing() {
         Element currentElement, lastParsedElement, root = new Html();
         currentElement = lastParsedElement = root;
-        final char[] DOCUMENT = this.DOCUMENT.toCharArray();
-        for(int charIndex = 0; charIndex < DOCUMENT.length; charIndex++) {
+        for(; charIndex < DOCUMENT.length; charIndex++) {
             char currentChar = DOCUMENT[charIndex];
             if(currentChar == Parser.OPEN_BRACKET) {
-                StringBuilder sb = new StringBuilder();
-                do {
-                    sb.append(DOCUMENT[charIndex]);
-                } while (DOCUMENT[++charIndex] != Parser.CLOSE_BRACKET);
+                sb.setLength(0);
+                readOpenTag();
                 if(!sb.toString().contains("/")) {
                     sb.append(DOCUMENT[charIndex]);
+                    System.out.println("--------------");
+                    System.out.println(sb.toString());
+                    System.out.println("--------------");
                     Element newElem = getElementByStringName(sb.toString());
                     if(newElem.getName().equals(ElementName.UNKNOWN)) {
                         continue;
@@ -77,6 +79,12 @@ public class TopToBottomParser implements Parser{
             return ElementName.valueOf(matcher.group().trim().toUpperCase());
         }
         return ElementName.UNKNOWN;
+    }
+
+    private void readOpenTag() {
+        do {
+            sb.append(DOCUMENT[charIndex]);
+        } while (DOCUMENT[++charIndex] != Parser.CLOSE_BRACKET);
     }
 }
 
