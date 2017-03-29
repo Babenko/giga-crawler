@@ -4,8 +4,11 @@ import com.giga.crawler.model.element.Element;
 import com.giga.crawler.model.element.ElementFactory;
 import com.giga.crawler.model.element.ElementName;
 import com.giga.crawler.model.element.Html;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,31 +17,35 @@ import java.util.regex.Pattern;
  */
 public class TopToBottomParser implements Parser{
 
-    private final String DOCUMENT;
+    private final char[] DOCUMENT;
     private LinkedList<ElementName> elementNames = new LinkedList<>();
     private ElementFactory elementFactory = new ElementFactory();
+    private StringBuilder sb = new StringBuilder();
+    private int charIndex = 0;
 
     public TopToBottomParser(String document) {
-        this.DOCUMENT = document;
+        DOCUMENT = document.toCharArray();
     }
 
     @Override
     public Element getRoot() {
+        charIndex = 0;
         return processing();
     }
 
     private Element processing() {
         Element currentElement, lastParsedElement, root = new Html();
+        String payload = StringUtils.EMPTY;
         currentElement = lastParsedElement = root;
-        for(int charIndex = 0; charIndex < DOCUMENT.length(); charIndex++) {
-            char currentChar = DOCUMENT.charAt(charIndex);
+        for(; charIndex < DOCUMENT.length; charIndex++) {
+            char currentChar = DOCUMENT[charIndex];
             if(currentChar == Parser.OPEN_BRACKET) {
-                StringBuilder sb = new StringBuilder();
-                do {
-                    sb.append(DOCUMENT.charAt(charIndex));
-                } while (DOCUMENT.charAt(++charIndex) != Parser.CLOSE_BRACKET);
+                sb.setLength(0);
+                currentElement.setPayload(payload);
+                payload = StringUtils.EMPTY;
+                readTag();
                 if(!sb.toString().contains("/")) {
-                    sb.append(DOCUMENT.charAt(charIndex));
+                    sb.append(DOCUMENT[charIndex]);
                     Element newElem = getElementByStringName(sb.toString());
                     if(newElem.getName().equals(ElementName.UNKNOWN)) {
                         continue;
@@ -51,8 +58,11 @@ public class TopToBottomParser implements Parser{
                 } else if(!elementNames.isEmpty()) {
                     elementNames.removeLast();
                     lastParsedElement = currentElement;
+                    payload = StringUtils.EMPTY;
                     currentElement = currentElement.getParent();
                 }
+            } else {
+                payload += currentChar;
             }
         }
         return root;
@@ -70,11 +80,17 @@ public class TopToBottomParser implements Parser{
     }
 
     private ElementName validate(String name) {
-        Pattern pattern = Pattern.compile("\\w*");//Pattern.compile("<(\\\"[^\\\"]*\\\"|'[^']*'|[^'\\\">])*>");
+        Pattern pattern = Pattern.compile("\\w*");
         Matcher matcher = pattern.matcher(name);
         if(matcher.find(1)) {
             return ElementName.valueOf(matcher.group().trim().toUpperCase());
         }
         return ElementName.UNKNOWN;
+    }
+
+    private void readTag() {
+        do {
+            sb.append(DOCUMENT[charIndex]);
+        } while (DOCUMENT[++charIndex] != Parser.CLOSE_BRACKET);
     }
 }

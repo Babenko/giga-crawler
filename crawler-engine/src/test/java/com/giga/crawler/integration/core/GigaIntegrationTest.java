@@ -7,6 +7,8 @@ import org.junit.Test;
 import util.ResourceLoader;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -18,6 +20,7 @@ public class GigaIntegrationTest extends IntegrationTest {
 
     private final String SIMPLE_HTML = "integration/simple.html";
     private final String SIMPLE_SIBLING_HTML = "integration/simple-sibling.html";
+    private final String SIMPLE_PAYLOAD_HTML = "integration/simple-payload.html";
 
     @Test
     public void testSimplePageParsing() throws Exception {
@@ -63,6 +66,78 @@ public class GigaIntegrationTest extends IntegrationTest {
         Element span = div.getNext();
         assertThat(span.getPrevious().getName(), equalTo(ElementName.DIV));
         assertNull(span.getNext());
+    }
+
+    @Test
+    public void testSimpleElementPayload() throws Exception {
+        Element root = Giga.of(ResourceLoader.loadFile(SIMPLE_HTML)).getRoot();
+
+        Element div = root.getChildren()
+                .stream()
+                .filter(element -> element.getName().equals(ElementName.BODY))
+                .flatMap(element -> element.getChildren().stream())
+                .filter(element -> element.getName().equals(ElementName.DIV))
+                .findFirst()
+                .orElse(null);
+
+        assertThat(div, notNullValue());
+
+        assertThat(div.getPayload().trim(), equalTo("simple html"));
+    }
+
+    @Test
+    public void testSimplePageWithSiblingsPayload() throws Exception {
+
+        Element root = Giga.of(ResourceLoader.loadFile(SIMPLE_SIBLING_HTML)).getRoot();
+        assertNull(root.getNext());
+        assertNull(root.getPrevious());
+
+        Element div = root.getChildren()
+                .stream()
+                .filter(element -> element.getName().equals(ElementName.BODY))
+                .flatMap(element -> element.getChildren().stream())
+                .filter(element -> element.getName().equals(ElementName.DIV))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(div);
+
+        assertThat(div.getPayload().trim(), equalTo("simple div"));
+
+        Element h1 = div.getPrevious();
+
+        assertThat(h1.getPayload().trim(), equalTo("Some header"));
+
+        Element span = div.getNext();
+
+        assertThat(span.getPayload().trim(), equalTo("simple span"));
+
+    }
+
+    @Test
+    public void testSimplePayload() throws Exception {
+        Element root = Giga.of(ResourceLoader.loadFile(SIMPLE_PAYLOAD_HTML)).getRoot();
+
+        Element div = root.getChildren()
+                .stream()
+                .filter(element -> element.getName().equals(ElementName.BODY))
+                .flatMap(element -> element.getChildren().stream())
+                .filter(element -> element.getName().equals(ElementName.DIV))
+                .findFirst()
+                .orElse(null);
+
+        assertThat(div, notNullValue());
+
+        assertThat(div.getChildren().get(0).getPayload().trim(), equalTo("span text"));
+
+        String divPayload = div.getPayload();
+        List<String> filteredPayload = Stream.of(divPayload.split("\n"))
+                .map(String::trim)
+                .filter(val -> !val.isEmpty())
+                .collect(Collectors.toList());
+
+        assertThat(filteredPayload.size(), equalTo(2));
+        assertThat(filteredPayload, hasItems("before span", "after span"));
     }
 
 }

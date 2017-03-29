@@ -4,6 +4,7 @@ import com.giga.crawler.model.attribute.Attribute;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Sem Babenko
@@ -12,7 +13,7 @@ public abstract class CommonElement implements Element {
 
     protected List<Attribute> attributes;
 
-    protected String payload;
+    protected String payload = "";
 
     protected List<Element> children = new ArrayList<>();
 
@@ -75,5 +76,11 @@ public abstract class CommonElement implements Element {
     @Override
     public void prepend(Element element) {
         previous = element;
+    }
+
+    @Override
+    public void setPayload(String payload) {
+        Objects.requireNonNull(payload);
+        this.payload += payload + System.lineSeparator();
     }
 }

@@ -15,6 +15,8 @@ public interface Element extends Childable, Parentable, Siblingable {
 
     String getPayload();
 
+    void setPayload(String payload);
+
     List<Attribute> getAttributes();
 
 }
